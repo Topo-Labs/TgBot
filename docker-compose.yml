@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  bot:
+    build: .
+    container_name: telegram-bot
+    restart: unless-stopped
+    environment:
+      - BOT_TOKEN=${BOT_TOKEN}
+      - WEBHOOK_URL=${WEBHOOK_URL}
+      - DATABASE_URL=sqlite+aiosqlite:///./data/telegram_bot.db
+      - GROUP_CHAT_ID=${GROUP_CHAT_ID}
+      - ADMIN_USER_IDS=${ADMIN_USER_IDS}
+    volumes:
+      - ./logs:/app/logs
+      - ./data:/app/data
+    ports:
+      - "8443:8443"
+    networks:
+      - telegram-bot-network
+
+networks:
+  telegram-bot-network:
+    driver: bridge

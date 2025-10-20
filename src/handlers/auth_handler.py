@@ -1403,8 +1403,8 @@ class AuthHandler:
         except Exception as e:
             bot_logger.error(f"❌ AUTO-DELETE: Failed to delete message {message_id} in chat {chat_id}: {e}")
             bot_logger.error(f"❌ AUTO-DELETE: Error type: {type(e).__name__}")
-            import traceback
-            bot_logger.error(f"❌ AUTO-DELETE: Full traceback: {traceback.format_exc()}")
+            #import traceback
+            #bot_logger.error(f"❌ AUTO-DELETE: Full traceback: {traceback.format_exc()}")
 
     @staticmethod
     async def _auto_delete_verification_message(context: ContextTypes.DEFAULT_TYPE):

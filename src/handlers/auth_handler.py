@@ -7,6 +7,7 @@ from sqlalchemy import select
 
 from src.services.auth_service import AuthService
 from src.services.language_service import LanguageService
+from src.services.invitation_service import InvitationService
 from src.utils.config import config
 from src.utils.logger import bot_logger
 from src.utils.database import get_db_session
@@ -1292,8 +1293,12 @@ class AuthHandler:
 
             bot_logger.info(f"Member left: {user_name} (ID: {user_id})")
 
-            # 这里可以更新统计数据
-            # TODO: 实现离开统计功能
+            # 更新邀请统计数据
+            try:
+                await InvitationService.process_member_left(user_id)
+                bot_logger.info(f"Successfully updated invitation stats for left member: {user_name} (ID: {user_id})")
+            except Exception as e:
+                bot_logger.error(f"Error updating invitation stats for left member {user_id}: {e}")
 
     @staticmethod
     async def _send_group_message_with_auto_delete(

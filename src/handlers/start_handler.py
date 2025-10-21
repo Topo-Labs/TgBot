@@ -162,12 +162,10 @@ class StartHandler:
     async def _handle_inline_link_request(query, context: ContextTypes.DEFAULT_TYPE, user_id: int):
         """处理内联邀请链接请求"""
         try:
-            # 获取机器人用户名
-            bot_info = await context.bot.get_me()
-            bot_username = bot_info.username
+            from src.utils.config import config
 
             # 创建或获取邀请链接
-            invitation = await InvitationService.create_or_get_invite_link(user_id, bot_username)
+            invitation = await InvitationService.create_or_get_invite_link(user_id, context.bot, config.GROUP_CHAT_ID)
 
             # 获取邀请统计
             stats = await InvitationService.get_user_invitation_stats(user_id)
@@ -182,7 +180,7 @@ class StartHandler:
                 active=stats['active_members']
             )
 
-            message = f"{copy_prompt}https://t.me/{bot_username}?start={invitation.invite_code}\n\n{stats_text}"
+            message = f"{copy_prompt}\n{invitation.invite_link}\n\n{stats_text}"
 
             # 创建键盘
             keyboard = [
